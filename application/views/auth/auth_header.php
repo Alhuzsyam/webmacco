@@ -38,6 +38,12 @@
         font-size: 25px;
     }
 
+    .mysubtitle {
+        font-family: "Kanit", sans-serif;
+        color: #f69168;
+        font-size: 15px;
+    }
+
     .bg-main {
         background: #F69168;
         /* fallback for old browsers */
@@ -45,6 +51,24 @@
         /* Chrome 10-25, Safari 5.1-6 */
         /* background: linear-gradient(to right, #F37335, #FDC830); */
         /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    }
+
+    .bgc {
+        border: none;
+        padding: 25px;
+        background: url(<?= base_url('assets/img/image/img.svg') ?>);
+        background-repeat: no-repeat;
+        background-size: 200px;
+        background-position: right;
+    }
+
+    .bgc2 {
+        border: none;
+        padding: 25px;
+        background: url(<?= base_url('assets/img/image/image.svg') ?>);
+        background-repeat: no-repeat;
+        background-size: 200px;
+        background-position: right;
     }
 
     .logo-size {
