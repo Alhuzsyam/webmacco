@@ -10,6 +10,7 @@ class Admin extends CI_Controller
     }
     public function index()
     {
+        $data['totusers'] = $this->db->get('daftar_alat')->num_rows();
         $data['title'] = "Dashboard";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->view('template/header', $data);
@@ -75,5 +76,26 @@ class Admin extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
         Access Changed
         </div>');
+    }
+
+    public function users()
+    {
+
+        $data['ureaders'] = $this->db->get('daftar_alat')->result_array();
+        $data['title'] = "Macco Reader User";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('template/topbar', $data);
+        $this->load->view('admin/ureader', $data);
+        $this->load->view('template/footer');
+    }
+    public function deletemembers($id)
+    {
+        $this->db->delete('daftar_alat', ['id' => $id]);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+        Member has Deleted!
+        </div>');
+        redirect('admin/users');
     }
 }
