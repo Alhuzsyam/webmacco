@@ -81,7 +81,7 @@ class Admin extends CI_Controller
     public function users()
     {
 
-        $data['ureaders'] = $this->db->get('daftar_alat')->result_array();
+        $data['ureaders'] = $this->db->query('SELECT *, instansi.nama_instansi as ji FROM `daftar_alat` INNER JOIN instansi ON instansi.id = daftar_alat.Jenis_instansi')->result_array();
         $data['title'] = "Macco Reader User";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->view('template/header', $data);
@@ -90,8 +90,9 @@ class Admin extends CI_Controller
         $this->load->view('admin/ureader', $data);
         $this->load->view('template/footer');
     }
-    public function deletemembers($id)
+    public function deletemembers()
     {
+        $id = $_GET['id'];
         $this->db->delete('daftar_alat', ['id' => $id]);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
         Member has Deleted!

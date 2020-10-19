@@ -197,6 +197,33 @@ class Macco extends REST_Controller
             $this->set_response($sukses, REST_Controller::HTTP_OK);
         }
     }
+    public function getlocation_get()
+    {
+        $id = $_GET['id'];
+        $locations = $this->db->get_where('daftar_alat')->result_array();
+        // echo json_encode($data);
+        $base_location = array(
+            'logitude' => $_GET['long'],
+            'latitude' => $_GET['lat'],
+        );
+        $this->db->update('masker_user', $base_location, array('id_user' => $id));
+        foreach ($locations as $key => $location) {
+            $a = $base_location['latitude'] - $location['latitude'];
+            $b = $base_location['logitude'] - $location['longitude'];
+            $distance = sqrt(($a ** 2) + ($b ** 2));
+            $distances[$key] = $distance;
+        }
+        asort($distances);
+        $closest = $locations[key($distances)];
+
+        // echo "Closest foreach suburb is: " . $closest['alamat'];
+        $terdekat = [
+            'latitude' => $closest['latitude'],
+            'longitude' => $closest['longitude'],
+            'alamat' => $closest['alamat'],
+        ];
+        echo json_encode($terdekat);
+    }
     public function registmasker_get()
     {
         $id_masker = $_GET['id_masker'];

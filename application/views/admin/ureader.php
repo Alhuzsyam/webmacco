@@ -1,4 +1,5 @@
                 <!-- Begin Page Content -->
+                <!-- <link rel="stylesheet" href="cdn.datatables.net/1.10.22/css/jquery.dataTables.min.css"> -->
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
@@ -7,7 +8,7 @@
                         <div class="col-lg-12">
                             <?= form_error('menu', '<div class="alert alert-danger" role="alert">', '</div>') ?>
                             <?= $this->session->flashdata('message'); ?>
-                            <table class="table table-hover">
+                            <table id="mytable" class="table table-hover">
                                 <thead>
                                     <tr>
                                         <th scope="col">#</th>
@@ -17,10 +18,10 @@
                                         <th scope="col">Instansi</th>
                                         <th scope="col">Negara</th>
                                         <th scope="col">Telephone</th>
-                                        <th scope="col">Handphone</th>
+                                        <!-- <th scope="col">Handphone</th>
                                         <th scope="col">Isntansi</th>
                                         <th scope="col">Alamat</th>
-                                        <th scope="col">Kota</th>
+                                        <th scope="col">Kota</th> -->
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -42,7 +43,7 @@
                                                 <?= $us['email'] ?>
                                             </td>
                                             <td>
-                                                <?= $us['Jenis_instansi'] ?>
+                                                <?= $us['ji'] ?>
                                             </td>
                                             <td>
                                                 <?= $us['negara'] ?>
@@ -50,21 +51,21 @@
                                             <td>
                                                 <?= $us['telephone'] ?>
                                             </td>
-                                            <td>
-                                                <?= $us['hp'] ?>
+                                            <!-- <td>
+                                                <?//= $us['hp'] ?>
                                             </td>
                                             <td>
-                                                <?= $us['nama_instansi'] ?>
+                                                <?//= $us['nama_instansi'] ?>
                                             </td>
                                             <td>
-                                                <?= $us['alamat'] ?>
+                                                <?//= $us['alamat'] ?>
                                             </td>
                                             <td>
-                                                <?= $us['kota'] ?>
-                                            </td>
+                                                <?//= $us['kota'] ?>
+                                            </td> -->
                                             <td>
-                                                <a href="" class="badge badge-success">Edit</a>
-                                                <a href="<?= base_url('admin/deletemembers/') . $us['id'] ?>" class="badge badge-danger">Delete</a>
+                                                <a href="" class="badge badge-success">Detail</a>
+                                                <a href="<?= base_url('admin/deletemembers/') . '?id=' . $us['id'] ?>" class="badge badge-danger">Delete</a>
                                             </td>
                                         </tr>
                                     <?php endforeach;
@@ -78,3 +79,9 @@
 
                 </div>
                 <!-- End of Main Content -->
+                <!-- <script>
+                    $(document).ready(function() {
+                        $('#mytable').DataTable();
+                    });
+                </script> -->
+                <!-- <script src="cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script> -->
