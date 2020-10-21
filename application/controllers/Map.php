@@ -16,4 +16,9 @@ class Map extends CI_Controller
         $data = $this->db->get('daftar_alat')->result_array();
         echo json_encode($data);
     }
+    public function fetchuser()
+    {
+        $data = $this->db->get('masker_user')->result_array();
+        echo json_encode($data);
+    }
 }

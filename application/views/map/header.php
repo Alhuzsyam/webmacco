@@ -71,14 +71,66 @@
                             });
 
                             var infoWindow = new google.maps.InfoWindow({
-                                content: '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' +
-                                    alamat + '<br>' + ' instansi :' + ni + '<br>' + '<div class="img-thumbnail ">' +
-                                    '<img src="<?= base_url('assets/img/profile/') ?>' + foto + '">' +
+                                content: '<div class="img-thumbnail" style="width: 130px;">' +
+                                    '<img style="width: 120px;border-radius: 5px;" src="<?= base_url('assets/img/profile/') ?>' + foto + '">' +
+                                    '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '<br>' +
                                     '</div>',
                             });
-                            marker.addListener('click', function() {
+                            // marker.addListener('click', function() {
+                            //     infoWindow.open(map, marker);
+                            // });
+                            google.maps.event.addListener(marker, 'mouseover', function() {
                                 infoWindow.open(map, marker);
                             });
+                            google.maps.event.addListener(marker, 'mouseout', function() {
+                                infoWindow.close(map, marker);
+                            });
+                        }
+                    }
+                });
+            fetch('http://localhost/webmacco/map/fetchuser')
+                .then(response => response.json())
+                .then(data => {
+                    for (const i in data) {
+                        var lat = parseFloat(data[i].latitude);
+                        var long = parseFloat(data[i].logitude);
+                        // var ni = data[i].nama_instansi;
+                        // var alamat = data[i].alamat;
+                        // var foto = data[i].foto;
+                        console.log(lat, long);
+
+                        addMarker({
+                            lat: lat,
+                            lng: long
+                        })
+
+                        function addMarker(coords) {
+                            var marker = new google.maps.Marker({
+                                position: coords,
+                                dragable: true,
+                                map: map,
+                                icon: '<?= base_url('assets/img/image/user.svg') ?>',
+                            });
+                            google.maps.event.addListener(marker, 'mouseover', function() {
+                                if (marker.getAnimation() !== null) {
+                                    marker.setAnimation(null);
+                                } else {
+                                    marker.setAnimation(google.maps.Animation.BOUNCE);
+                                }
+                            });
+                            // google.maps.event.addListener(marker, 'mouseout', function() {
+                            //     marker.setAnimation(google.maps.Animation.DROP);
+                            // });
+
+                            // var infoWindow = new google.maps.InfoWindow({
+                            //     content: '<div class="img-thumbnail" style="width: 130px;">' +
+                            //         '<img style="width: 120px;border-radius: 5px;" src="<?//= base_url('assets/img/profile/') ?>' + foto + '">' +
+                            //         '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '<br>' +
+                            //         '</div>',
+                            // });
+                            // marker.addListener('click', function() {
+                            //     infoWindow.open(map, marker);
+                            // });
                         }
                     }
                 });

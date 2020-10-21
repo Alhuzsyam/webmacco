@@ -10,7 +10,8 @@ class Admin extends CI_Controller
     }
     public function index()
     {
-        $data['totusers'] = $this->db->get('daftar_alat')->num_rows();
+        $data['member'] = $this->db->get('daftar_alat')->num_rows();
+        $data['totusers'] = $this->db->get('masker_user')->num_rows();
         $data['title'] = "Dashboard";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->view('template/header', $data);
@@ -81,7 +82,7 @@ class Admin extends CI_Controller
     public function users()
     {
 
-        $data['ureaders'] = $this->db->query('SELECT *, instansi.nama_instansi as ji FROM `daftar_alat` INNER JOIN instansi ON instansi.id = daftar_alat.Jenis_instansi')->result_array();
+        $data['ureaders'] = $this->db->query('SELECT daftar_alat.penaggung_jawab,daftar_alat.id,daftar_alat.id_reader,daftar_alat.email,daftar_alat.Jenis_instansi,daftar_alat.negara,daftar_alat.telephone,daftar_alat.hp,daftar_alat.nama_instansi,daftar_alat.username,daftar_alat.alamat,daftar_alat.alamat,daftar_alat.kota,daftar_alat.longitude,daftar_alat.latitude,daftar_alat.foto,instansi.nama_instansi as ji, instansi.id as idi FROM `daftar_alat` INNER JOIN instansi ON instansi.id = daftar_alat.Jenis_instansi ')->result_array();
         $data['title'] = "Macco Reader User";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->view('template/header', $data);
@@ -98,5 +99,19 @@ class Admin extends CI_Controller
         Member has Deleted!
         </div>');
         redirect('admin/users');
+    }
+
+    public function detail()
+    {
+        $id = $this->input->get('id');
+        $data['member'] = $this->db->get_where('daftar_alat', ['id' => $id])->row_array();
+        var_dump($data);
+        $data['title'] = "Macco Reader User";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar', $data);
+        $this->load->view('template/topbar', $data);
+        $this->load->view('admin/member_detail', $data);
+        $this->load->view('template/footer');
     }
 }
