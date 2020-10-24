@@ -221,8 +221,19 @@ class Macco extends REST_Controller
             'latitude' => $closest['latitude'],
             'longitude' => $closest['longitude'],
             'alamat' => $closest['alamat'],
+            'user' => $id,
         ];
-        echo json_encode($terdekat);
+        $scan = $this->db->get_where('masker_raders', ['id_reader_user' => $id])->row_array();
+        if ($scan['id_reader_user'] == $id) {
+            $this->db->where('id_reader_user', $id);
+            $this->db->delete('masker_raders');
+            echo json_encode($terdekat);
+        } else {
+            $scan = $this->db->get_where('masker_user', ['id_user' => $id])->row_array();
+            $email = $scan['email'];
+            $this->_kirim($email);
+            // $this->set_response(['status' => 'anda tidak menggunakan masker'], REST_Controller::HTTP_OK);
+        }
     }
     public function registmasker_get()
     {
@@ -238,6 +249,40 @@ class Macco extends REST_Controller
             }
         } else {
             $this->set_response(['status' => 'tidak ditemukan'], REST_Controller::HTTP_OK);
+        }
+    }
+    public function isitag_get()
+    {
+
+        $id = $_GET['idreader'];
+        $tag = $_GET['tag'];
+        $data = [
+            'id_reader' => $id,
+            'tag' => $tag
+        ];
+        $check = $this->db->get_where('scanner_machine', ['tag' => $tag])->row_array();
+        if ($check['tag'] == $tag) {
+            $this->set_response(['status' => 'sudah ada'], REST_Controller::HTTP_OK);
+        } else {
+            $this->db->insert('scanner_machine', $data);
+            $this->set_response(['status' => 'sukses'], REST_Controller::HTTP_OK);
+        }
+    }
+    public function scan_get()
+    {
+        $tag = $_GET['tag'];
+        $data = $this->db->get_where('masker', ['tag' => $tag])->row_array();
+        // var_dump($data);
+        $read = [
+            'id_reader' => $data['tag'],
+            'id_reader_user' => $data['id_user']
+        ];
+        $check = $this->db->get('masker_raders')->row_array();
+        if ($check['id_reader'] == $tag) {
+            $this->set_response(['status' => 'already scanned'], REST_Controller::HTTP_OK);
+        } else {
+            $this->db->insert('masker_raders', $read);
+            $this->set_response(['status' => 'scanned'], REST_Controller::HTTP_OK);
         }
     }
 
@@ -258,5 +303,48 @@ class Macco extends REST_Controller
         ];
 
         $this->set_response($message, REST_Controller::HTTP_NO_CONTENT); // NO_CONTENT (204) being the HTTP response code
+    }
+
+    private function _kirim($email)
+    {
+        // Konfigurasi email
+        $config = [
+            'mailtype'  => 'html',
+            'charset'   => 'utf-8',
+            'protocol'  => 'smtp',
+            'smtp_host' => 'smtp.gmail.com',
+            'smtp_user' => 'email@gmail.com',  // Email gmail
+            'smtp_pass'   => 'passwordgmail',  // Password gmail
+            'smtp_crypto' => 'ssl',
+            'smtp_port'   => 465,
+            'crlf'    => "\r\n",
+            'newline' => "\r\n"
+        ];
+
+        // Load library email dan konfigurasinya
+        $this->load->library('email', $config);
+
+        // Email dan nama pengirim
+        $this->email->from('macco@gmail.com', 'Macco.com');
+
+        // Email penerima
+        $this->email->to('$email'); // Ganti dengan email tujuan
+
+        // Lampiran email, isi dengan url/path file
+        $this->email->attach('https://masrud.com/content/images/20181215150137-codeigniter-smtp-gmail.png');
+
+        // Subject email
+        $this->email->subject('Warrning | Macco.com');
+
+        // Isi email
+        $this->email->message("Anda telah melanggar new normal gunakan masker anda");
+
+        // Tampilkan pesan sukses atau error
+        if ($this->email->send()) {
+            // echo 'Sukses! email berhasil dikirim.';
+            $this->set_response(['status' => 'Sukses! email berhasil dikirim("Gunakan Masker Anda")'], REST_Controller::HTTP_OK);
+        } else {
+            echo 'Error! email tidak dapat dikirim.';
+        }
     }
 }
