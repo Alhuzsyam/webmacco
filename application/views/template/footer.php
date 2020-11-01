@@ -48,6 +48,13 @@
  <!-- Custom scripts for all pages-->
  <script src="<?= base_url('assets/'); ?>js/sb-admin-2.min.js"></script>
 
+ <script src="<?= base_url() ?>assets/js/custom-file-input.js"></script>
+
+ <!-- preview maps -->
+ <script src="<?= base_url("assets/js/map.js"); ?>"></script>
+ <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuAQmalDoKhlwPwBbfcYaEbPV3-OXdP9w&libraries=places&callback=initialize"></script>
+ <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script> -->
+
 
  <script>
      $('.custom-file-input').on('change', function() {
@@ -67,6 +74,23 @@
              success: function() {
                  document.location.href = "<?= base_url('admin/roleaccess/'); ?>" + roleId;
              }
+         });
+     });
+     $(document).ready(function() {
+         function readURL(input) {
+             if (input.files && input.files[0]) {
+                 var reader = new FileReader();
+
+                 reader.onload = function(e) {
+                     $('#blah').attr('src', e.target.result);
+                 }
+
+                 reader.readAsDataURL(input.files[0]);
+             }
+         }
+
+         $("#imgInp").change(function() {
+             readURL(this);
          });
      });
  </script>

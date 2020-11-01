@@ -80,13 +80,30 @@ class Authentification extends CI_Controller
         } else {
             $data = [
                 'name'      =>  htmlspecialchars($this->input->post('name', true)),
-                'email'     => htmlspecialchars($this->input->post('email', true)),
+                'email'     =>  htmlspecialchars($this->input->post('email', true)),
                 'image'     => 'default.svg',
                 'password'  => password_hash($this->input->post('password1'), PASSWORD_DEFAULT),
                 'role_id'   => 2,
                 'is_active' => 1,
                 'date_created' => time()
             ];
+            $data2 = [
+                'penaggung_jawab'      =>  htmlspecialchars($this->input->post('name', true)),
+                'email'     =>  htmlspecialchars($this->input->post('email', true)),
+                'Jenis_instansi' => '-',
+                'negara' => '-',
+                'telephone' => '-',
+                'hp' => '-',
+                'nama_instansi' => '-',
+                'username' => '-',
+                'alamat' => '-',
+                'kota' => '-',
+                'foto' => 'defaultgedung.jpg',
+                'longitude' => '-',
+                'latitude' => '-',
+            ];
+
+            $this->db->insert('daftar_alat', $data2);
             $this->db->insert('user', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
            Congratulation your account has been created. Please Login ! 

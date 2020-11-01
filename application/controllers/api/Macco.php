@@ -1,159 +1,49 @@
 <?php
 
 defined('BASEPATH') or exit('No direct script access allowed');
-
-// This can be removed if you use __autoload() in config.php OR use Modular Extensions
-/** @noinspection PhpIncludeInspection */
 require APPPATH . '/libraries/REST_Controller.php';
 
-// use namespace
 use Restserver\Libraries\REST_Controller;
 
-/**
- * This is an example of a few basic user interaction methods you could use
- * all done with a hardcoded array
- *
- * @package         CodeIgniter
- * @subpackage      Rest Server
- * @category        Controller
- * @author          Phil Sturgeon, Chris Kacerguis
- * @license         MIT
- * @link            https://github.com/chriskacerguis/codeigniter-restserver
- */
 class Macco extends REST_Controller
 {
 
     function __construct()
     {
-        // Construct the parent class
         parent::__construct();
-
-        // Configure limits on our controller methods
-        // Ensure you have created the 'limits' table and enabled 'limits' within application/config/rest.php
-        $this->methods['users_get']['limit'] = 500; // 500 requests per hour per user/key
-        $this->methods['users_post']['limit'] = 100; // 100 requests per hour per user/key
-        $this->methods['users_delete']['limit'] = 50; // 50 requests per hour per user/key
+        $this->methods['users_get']['limit'] = 500;
+        $this->methods['users_post']['limit'] = 100;
+        $this->methods['users_delete']['limit'] = 50;
+        $this->load->model('users_model');
     }
 
-    public function readuser_get()
-    {
-        // Users from a data store e.g. database
-        // $users = [
-        //     ['id' => 1, 'name' => 'John', 'email' => 'john@example.com', 'fact' => 'Loves coding'],
-        //     ['id' => 2, 'name' => 'Jim', 'email' => 'jim@example.com', 'fact' => 'Developed on CodeIgniter'],
-        //     ['id' => 3, 'name' => 'Jane', 'email' => 'jane@example.com', 'fact' => 'Lives in the USA', ['hobbies' => ['guitar', 'cycling']]],
-        // ];
-        $users = $this->db->get_where("masker_user")->result_array();
 
+
+    public function index_get()
+    {
         $id = $this->get('id');
 
-        // If the id parameter doesn't exist return all the users
-
-        if ($id === NULL) {
-            // Check if the users data store contains users (in case the database result returns NULL)
-            if ($users) {
-                // Set the response and exit
-                $this->response($users, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-            } else {
-                // Set the response and exit
-                $this->response([
-                    'status' => FALSE,
-                    'message' => 'No users were found'
-                ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-            }
+        if ($id == null) {
+            $user_macco = $this->users_model->get_all_user();
+        } else {
+            $user_macco = $this->users_model->get_all_user($id);
         }
 
-        // Find and return a single record for a particular user.
-        else {
-            $id = (int) $id;
-
-            // Validate the id.
-            if ($id <= 0) {
-                // Invalid id, set the response and exit.
-                $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-            }
-
-            // Get the user from the array, using the id as key for retrieval.
-            // Usually a model is to be used for this.
-
-            $user = NULL;
-
-            if (!empty($users)) {
-                foreach ($users as $key => $value) {
-                    if (isset($value['id']) && $value['id'] === $id) {
-                        $user = $value;
-                    }
-                }
-            }
-
-            if (!empty($user)) {
-                $this->set_response($user, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-            } else {
-                $this->set_response([
-                    'status' => FALSE,
-                    'message' => 'User could not be found'
-                ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-            }
+        if ($user_macco) {
+            $this->response($user_macco, 200);
+        } else {
+            $this->response([
+                'status' => false,
+                'message' => 'Tidak ditemukan data property'
+            ], 404);
         }
     }
 
-    public function readuserid_get($id)
-    {
-        $users = $this->db->get_where("masker_user", ['id_user' => $id])->result_array();
 
-        $id = $this->get('id');
 
-        // If the id parameter doesn't exist return all the users
 
-        if ($id === NULL) {
-            // Check if the users data store contains users (in case the database result returns NULL)
-            if ($users) {
-                // Set the response and exit
-                $this->response($users, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-            } else {
-                // Set the response and exit
-                $this->response([
-                    'status' => FALSE,
-                    'message' => 'No users were found'
-                ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-            }
-        }
 
-        // Find and return a single record for a particular user.
-        else {
-            $id = (int) $id;
-
-            // Validate the id.
-            if ($id <= 0) {
-                // Invalid id, set the response and exit.
-                $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-            }
-
-            // Get the user from the array, using the id as key for retrieval.
-            // Usually a model is to be used for this.
-
-            $user = NULL;
-
-            if (!empty($users)) {
-                foreach ($users as $key => $value) {
-                    if (isset($value['id']) && $value['id'] === $id) {
-                        $user = $value;
-                    }
-                }
-            }
-
-            if (!empty($user)) {
-                $this->set_response($user, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
-            } else {
-                $this->set_response([
-                    'status' => FALSE,
-                    'message' => 'User could not be found'
-                ], REST_Controller::HTTP_NOT_FOUND); // NOT_FOUND (404) being the HTTP response code
-            }
-        }
-    }
-
-    public function register_get()
+    public function index_post()
     {
         $length = 10;
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -162,51 +52,78 @@ class Macco extends REST_Controller
         for ($i = 0; $i < $length; $i++) {
             $randomString .= $characters[rand(0, $charactersLength - 1)];
         }
-
-        $id_masker = $_GET['id_masker'];
-        $no_induk = $_GET['no_induk'];
-        $nik = $_GET['nik'];
-        $nama = $_GET['nama'];
-        $no_kk = $_GET['no_kk'];
-        $alamat = $_GET['alamat'];
-        $email = $_GET['email'];
-        $users = $this->db->select('nik')->get_where("masker_user", ['nik' => $nik])->row_array();
+        $id_masker = $this->post('id_masker');
+        $no_induk = $this->post('no_induk');
+        $nik = $this->post('nik');
+        $no_kk = $this->post('no_kk');
+        $nama = $this->post('nama');
+        $alamat = $this->post('alamat');
+        $email = $this->post('email');
 
 
+        $data1 = [
+            'id_user' =>  $randomString,
+            'id_masker' => $id_masker,
+            'no_induk' => $no_induk,
+            'nik' => $nik,
+            'no_kk' => $no_kk,
+            'nama' => $nama,
+            'alamat' => $alamat,
+            'email' => $email,
+        ];
 
+        $cek_nik = $this->users_model->cek_nik($nik);
+        $cek_email = $this->users_model->cek_email($email);
 
-        if ($users['nik'] == $nik) {
-            $this->set_response('login', REST_Controller::HTTP_OK);
+        if ($cek_email && $cek_nik) {
+            $this->response([
+                'status' => true,
+                'message' => 'NIK dan Email Sudah Terdaftar',
+                'login' => 'OK'
+            ], 200);
+        } else if ($cek_nik) {
+            $this->response([
+                'status' => true,
+                'message' => 'NIK Sudah Terdaftar',
+                'akses' => 'Tidak diizinkan Daftar',
+                'login' => 'NO'
+            ], 200);
+        } else if ($cek_email) {
+            $this->response([
+                'status' => true,
+                'message' => 'Email Sudah Terdaftar',
+                'akses' => 'Tidak diizinkan',
+                'login' => 'NO'
+            ], 200);
         } else {
-
-            $data = [
-                'id_user' =>  $randomString,
-                'id_masker' => $id_masker,
-                'no_induk' => $no_induk,
-                'nik' => $nik,
-                'nama' => $nama,
-                'no_kk' => $no_kk,
-                'alamat' => $alamat,
-                'email' => $email
-            ];
-            $this->db->insert('masker_user', $data);
-            $sukses = [
-                'status' => 'Registered',
-                'id' => $data['id_user']
-            ];
-            $this->set_response($sukses, REST_Controller::HTTP_OK);
+            $tambah_user = $this->users_model->tambah_user($data1);
+            if ($tambah_user) {
+                $this->response([
+                    'status' => true,
+                    'message' => 'Berhasil Tambah User',
+                    'Proses' => 'Resgister Awal',
+                ], 200);
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Gagal Tambah User'
+                ], 404);
+            }
         }
     }
-    public function getlocation_get()
+
+
+    //tambahkan model
+    public function getlocation_post()
     {
-        $id = $_GET['id'];
-        $locations = $this->db->get_where('daftar_alat')->result_array();
-        // echo json_encode($data);
+        $id = $this->post('id');
+        $locations = $this->users_model->get_location();
         $base_location = array(
-            'logitude' => $_GET['long'],
-            'latitude' => $_GET['lat'],
+            'logitude' => $this->post('long'),
+            'latitude' => $this->post('lat'),
         );
-        $this->db->update('masker_user', $base_location, array('id_user' => $id));
+        $this->users_model->set_loc($base_location, $id);
+
         foreach ($locations as $key => $location) {
             $a = $base_location['latitude'] - $location['latitude'];
             $b = $base_location['logitude'] - $location['longitude'];
@@ -216,7 +133,6 @@ class Macco extends REST_Controller
         asort($distances);
         $closest = $locations[key($distances)];
 
-        // echo "Closest foreach suburb is: " . $closest['alamat'];
         $terdekat = [
             'latitude' => $closest['latitude'],
             'longitude' => $closest['longitude'],
@@ -235,15 +151,15 @@ class Macco extends REST_Controller
             // $this->set_response(['status' => 'anda tidak menggunakan masker'], REST_Controller::HTTP_OK);
         }
     }
-    public function registmasker_get()
+    public function registmasker_post()
     {
-        $id_masker = $_GET['id_masker'];
-        $id_user = $_GET['id_user'];
-        $users = $this->db->select('*')->get_where("masker", ['id_masker' => $id_masker])->row_array();
+        $id_masker = $this->post('id_masker');
+        $id_user = $this->post('id_user');
+        $users = $this->users_model->get_masker($id_masker);
         if ($users['id_masker'] == $id_masker) {
             if ($users['id_user'] == null) {
-                $this->db->set(['id_user' => $id_user])->where(['id_masker' => $id_masker])->update('masker');
-                $this->set_response(['status' => 'sukses'], REST_Controller::HTTP_OK);
+                $daftar = $this->users_model->daftar_masker($id_user, $id_masker);
+                $this->set_response(['message' => 'masker berhasil di daftarkan', 'status' => 'OK'], REST_Controller::HTTP_OK);
             } else {
                 $this->set_response(['status' => 'sudah ada'], REST_Controller::HTTP_OK);
             }
@@ -254,56 +170,76 @@ class Macco extends REST_Controller
     public function isitag_get()
     {
 
-        $id = $_GET['idreader'];
-        $tag = $_GET['tag'];
+
+        $tag = $this->get('tag');
+        $id = $this->get('id_reader');
+
+
         $data = [
+            'tag' => $tag,
             'id_reader' => $id,
-            'tag' => $tag
         ];
-        $check = $this->db->get_where('scanner_machine', ['tag' => $tag])->row_array();
-        if ($check['tag'] == $tag) {
-            $this->set_response(['status' => 'sudah ada'], REST_Controller::HTTP_OK);
+        $cek_tag = $this->users_model->check_tags($tag);
+        $cek_id = $this->users_model->check_id($id);
+
+        if ($cek_tag && $cek_id) {
+            $this->response([
+                'status' => true,
+                'message' => 'Id_reader dan Tag Sudah Terdaftar',
+            ], 200);
+        } else if ($cek_tag) {
+            $this->response([
+                'status' => true,
+                'message' => 'Tag Sudah Terdaftar',
+                'akses' => 'Tidak diizinkan Daftar',
+            ], 200);
+        } else if ($cek_id) {
+            $this->response([
+                'status' => true,
+                'message' => 'Id Sudah Terdaftar',
+                'akses' => 'Tidak diizinkan',
+            ], 200);
         } else {
-            $this->db->insert('scanner_machine', $data);
-            $this->set_response(['status' => 'sukses'], REST_Controller::HTTP_OK);
+            $tambah_user = $this->users_model->tambah_tag($data);
+            if ($tambah_user) {
+                $this->response([
+                    'status' => true,
+                    'message' => 'Berhasil Tambah Tag',
+                ], 200);
+            } else {
+                $this->response([
+                    'status' => false,
+                    'message' => 'Gagal Tambah User'
+                ], 404);
+            }
         }
     }
     public function scan_get()
     {
         $tag = $_GET['tag'];
-        $data = $this->db->get_where('masker', ['tag' => $tag])->row_array();
-        // var_dump($data);
+        $data = $this->users_model->check_mask($tag);
         $read = [
             'id_reader' => $data['tag'],
             'id_reader_user' => $data['id_user']
         ];
         $check = $this->db->get('masker_raders')->row_array();
         if ($check['id_reader'] == $tag) {
-            $this->set_response(['status' => 'already scanned'], REST_Controller::HTTP_OK);
+            $this->response([
+                'status' => false,
+                'message' => 'Already Scaned'
+            ], 200);
         } else {
-            $this->db->insert('masker_raders', $read);
-            $this->set_response(['status' => 'scanned'], REST_Controller::HTTP_OK);
+            $tambah_mreader = $this->users_model->tambah_mreader($read);
+            if ($tambah_mreader) {
+                $this->response([
+                    'status' => true,
+                    'message' => 'Scaned'
+                ], 200);
+            }
         }
     }
 
-    public function users_delete()
-    {
-        $id = (int) $this->get('id');
 
-        // Validate the id.
-        if ($id <= 0) {
-            // Set the response and exit
-            $this->response(NULL, REST_Controller::HTTP_BAD_REQUEST); // BAD_REQUEST (400) being the HTTP response code
-        }
-
-        // $this->some_model->delete_something($id);
-        $message = [
-            'id' => $id,
-            'message' => 'Deleted the resource'
-        ];
-
-        $this->set_response($message, REST_Controller::HTTP_NO_CONTENT); // NO_CONTENT (204) being the HTTP response code
-    }
 
     private function _kirim($email)
     {
@@ -342,7 +278,7 @@ class Macco extends REST_Controller
         // Tampilkan pesan sukses atau error
         if ($this->email->send()) {
             // echo 'Sukses! email berhasil dikirim.';
-            $this->set_response(['status' => 'Sukses! email berhasil dikirim("Gunakan Masker Anda")'], REST_Controller::HTTP_OK);
+            $this->set_response(['status' => 'email berhasil dikirim', 'mesaage' => '(Gunakan Masker Anda)'], REST_Controller::HTTP_OK);
         } else {
             echo 'Error! email tidak dapat dikirim.';
         }

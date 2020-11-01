@@ -86,7 +86,6 @@
 
                         <button type="button" class="form-control btn btn-primary btn-user btn-block" onclick="showPosition();"><i class="fas fa-map-marker-alt"></i> Pilih Lokasi Saat ini</button>
                     </div>
-
                     <div class="col-sm-6">
                         <button type="submit" class="form-control btn btn-primary btn-user btn-block">
                             <i class="fa fa-paper-plane"></i> Daftar!</i></button>

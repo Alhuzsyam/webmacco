@@ -9,7 +9,7 @@ class Register extends CI_Controller
         $this->load->helper(array('form', 'url'));
         $this->load->library('form_validation');
         // $dat['email'] = $this->db->select('email')->get('daftar_alat')->result_array();
-        $data['instansi'] = $this->db->get("instansi")->result_array();
+        // $data['instansi'] = $this->db->get("instansi")->result_array();
         $data['title'] = "Ragistration";
         $this->load->view('auth/auth_header', $data);
         $this->load->view('auth/daftaralat', $data);

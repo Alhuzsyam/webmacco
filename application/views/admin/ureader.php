@@ -43,7 +43,7 @@
                                                 <?= $us['email'] ?>
                                             </td>
                                             <td>
-                                                <?= $us['ji'] ?>
+                                                <?= $us['Jenis_instansi'] ?>
                                             </td>
                                             <td>
                                                 <?= $us['negara'] ?>

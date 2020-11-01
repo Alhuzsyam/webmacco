@@ -33,7 +33,8 @@
                             </div>
                             <div class="form-group row justify-content-end mt-2">
                                 <div class="col-sm-10">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Edit</button>
+                                    <a href="<?= base_url('user/lengkapi') ?>" class="btn btn-primary">Lengkapi</a>
                                 </div>
                             </div>
                             </form>
