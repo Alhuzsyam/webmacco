@@ -28,7 +28,7 @@
                                                     <td><?= date('d F Y', $user['date_created']) ?></td>
                                                 </tr>
                                             </table>
-                                            <a href="#" class="btn btn-primary stretched-link mt-3">Edit</a>
+                                            <a href="<?= base_url('map') ?>" class="btn btn-primary stretched-link mt-3"><i class="fas fa-map-marker-alt"></i> View Map</a>
                                         </div>
                                     </div>
                                 </div>

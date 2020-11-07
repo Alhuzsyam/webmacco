@@ -55,10 +55,35 @@ class Users_Model extends CI_Model
     }
     public function get_location()
     {
-        return $this->db->get_where('daftar_alat')->result_array();
+        return $this->db->get('reader_user')->result_array();
     }
     public function set_loc($base_location, $id)
     {
         return  $this->db->update('masker_user', $base_location, array('id_user' => $id));
+    }
+    public function get_table($table)
+    {
+        return $this->db->get($table)->result_array();
+    }
+    public function delete_mask($id)
+    {
+        return $this->db->delete('masker', ['id_masker' => $id]);
+    }
+    public function cek_mask($id)
+    {
+        return  $this->db->get_where('masker', ['id_masker' => $id])->row_array();
+    }
+    public function edit_user($id, $data)
+    {
+        $this->db->where('id_user', $id);
+        return $this->db->update('masker_user', $data);
+    }
+    public function cek_id($nik)
+    {
+        return $this->db->get_where('masker_user', ['nik' => $nik])->row_array();
+    }
+    public function getmaskeruser($id)
+    {
+        return $this->db->get_where('masker', ['id_user' => $id])->result_array();
     }
 }

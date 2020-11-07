@@ -8,36 +8,28 @@
                     <div class="row">
                         <div class="col-md-5 bgc">
                             <div class="p-5">
-                                <img src="<?= base_url('assets/img/image/macco.png') ?>" class="mb-0" style="width: 138px;" alt="">
+                                <!-- <img src="<//?= base_url('assets/img/image/macco.png') ?>" class="mb-5" style="width: 138px;" alt=""> -->
                             </div>
                         </div>
                         <div class="col-md-7">
                             <div class="p-5">
                                 <div class="text-center">
-                                    <p class="mytitle">Login Page</p>
+                                    <p class="mytitle"><?= $title ?></p>
                                     <?= $this->session->flashdata('message') ?>
                                 </div>
-                                <form class="user" method="POST" action="<?= base_url('authentification') ?>">
+                                <form class="user" method="POST" action="<?= base_url('authentification/forgotpassword') ?>">
                                     <div class="form-group">
                                         <label class="mysubtitle" for="">Email</label>
                                         <input type="text" class="form-control" id="email" name="email" aria-describedby="emailHelp" placeholder="" value="<?= set_value('email') ?>">
                                         <?= form_error('email', ' <small class="text-danger pl-3">', '</small>') ?>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="mysubtitle" for="">Password</label>
-                                        <input type="password" class="form-control" id="password" name="password" placeholder="">
-                                        <?= form_error('password', ' <small class="text-danger pl-3">', '</small>') ?>
-                                    </div>
                                     <button type="submit" class="btn btn-success  btn-block">
-                                        Login
+                                        Reset password
                                     </button>
                                 </form>
                                 <hr>
                                 <div class="text-center">
-                                    <a class="small" href="<?= base_url('Authentification/forgotpassword'); ?>">Forgot Password?</a>
-                                </div>
-                                <div class="text-center">
-                                    <a class="small" href="<?= base_url('Authentification/register'); ?>">Create an Account!</a>
+                                    <a class="small" href="<?= base_url('Authentification/'); ?>">Back to login</a>
                                 </div>
                             </div>
                         </div>

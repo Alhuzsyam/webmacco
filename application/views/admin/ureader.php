@@ -65,7 +65,7 @@
                                             </td> -->
                                             <td>
                                                 <a href="<?= base_url('admin/detail/') .  '?id=' . $us['id'] ?>" class="badge badge-success">Detail</a>
-                                                <a href="<?= base_url('admin/deletemembers/') . '?id=' . $us['id'] ?>" class="badge badge-danger">Delete</a>
+                                                <a href="<?= base_url('admin/deletemembers/') . '?id=' . $us['email'] ?>" class="badge badge-danger">Delete</a>
                                             </td>
                                         </tr>
                                     <?php endforeach;

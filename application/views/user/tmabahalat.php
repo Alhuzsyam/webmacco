@@ -13,7 +13,8 @@
                                 <img class="card-img-top" src="<?= base_url('assets/img/profile/') . 'device.svg' ?>" alt="Card image cap">
                                 <div class="card-body">
                                     <h5 class="card-title">Tambah Kan Reader</h5>
-                                    <p class="card-text">Isikan nama lokasi dan keterangan tempat anda dengan jelas, hal ini agar memudahkan petugas pada saat melakukan perbaikan<br>Terimakasih !!</p>
+                                    <p class="card-text">Isikan nama lokasi dan keterangan tempat anda dengan jelas, hal ini agar memudahkan petugas pada saat melakukan perbaikan.
+                                        <b>Setelah anda memilih lokasi saat ini, geser marker map untuk memperjelas lokasi</b><br>Terimakasih !!</p>
                                     <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
                                 </div>
                             </div>
@@ -35,16 +36,30 @@
                             <div class="form-group">
                                 <!-- <div class="row"> -->
                                 <label for="">Keterangan</label>
-                                <textarea name="ket" id="" class="form-control" cols="30" rows="9"></textarea>
+                                <textarea name="ket" id="" class="form-control" cols="10" rows="2"></textarea>
                                 <?= form_error('ket', ' <small class="text-danger pl-0">', '</small>') ?>
                                 <!-- </div> -->
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Tambah</button>
+                                <div id="map-canvas" class="form-control" style="height: 300px"></div>
+                                <br>
+                            </div>
+                            <div class="row mb-5">
+                                <div class="col-sm-6 mb-3 mb-sm-0">
+                                    <button type="button" class="form-control btn btn-primary btn-user btn-block" onclick="showPosition();"><i class="fas fa-map-marker-alt"></i> Pilih Lokasi Saat ini</button>
+                                </div>
+                                <div class="col-sm-6">
+                                    <button type="submit" class="form-control btn btn-primary btn-user btn-block">
+                                        <i class="fa fa-paper-plane"></i> Simpan</i></button>
+                                </div>
                             </div>
 
                         </div>
                     </div>
+                    <input type="hidden" name="alamat_lengkap" id="map-search" placeholder="Ketik Alamat..." class="form-control" value="" />
+                    <input type="hidden" name="kota" id="kota" placeholder="Nama Kota..." class="form-control reg-input-city" value="" />
+                    <input type="hidden" name="lat" id="lat" value="" class="latitude">
+                    <input type="hidden" name="long" id="long" value="" class="longitude">
                     </form>
                 </div>
                 <!-- /.container-fluid -->

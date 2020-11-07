@@ -2,7 +2,7 @@
  <footer class="sticky-footer bg-white">
      <div class="container my-auto">
          <div class="copyright text-center my-auto">
-             <span>Copyright &copy; Alhuzwiri <?= date('Y') ?></span>
+             <span>Copyright &copy; Macco <?= date('Y') ?></span>
          </div>
      </div>
  </footer>
@@ -54,7 +54,7 @@
  <script src="<?= base_url("assets/js/map.js"); ?>"></script>
  <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCuAQmalDoKhlwPwBbfcYaEbPV3-OXdP9w&libraries=places&callback=initialize"></script>
  <!-- <script src="https://code.jquery.com/jquery-3.5.1.slim.js" integrity="sha256-DrT5NfxfbHvMHux31Lkhxg42LY6of8TaYyK50jnxRnM=" crossorigin="anonymous"></script> -->
-
+ <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.js"></script>
 
  <script>
      $('.custom-file-input').on('change', function() {
@@ -77,6 +77,8 @@
          });
      });
      $(document).ready(function() {
+         $('.table').DataTable();
+
          function readURL(input) {
              if (input.files && input.files[0]) {
                  var reader = new FileReader();

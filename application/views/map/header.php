@@ -20,6 +20,8 @@
     <style type="text/css">
         /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+        @import url("https://fonts.googleapis.com/css2?family=Kanit:wght@600&display=swap");
+
         #map {
             height: 90%;
             margin-top: -25px;
@@ -32,6 +34,23 @@
             margin: 0;
             padding: 0;
         }
+
+        .mysubtitle {
+            font-family: "Kanit", sans-serif;
+            color: #f69168;
+            font-size: 25px;
+            text-decoration: none;
+        }
+
+        a:hover {
+            background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/9632/squiggle.svg");
+            background-position: bottom;
+            background-repeat: repeat-x;
+            background-size: 20%;
+            border-bottom: 0;
+            padding-bottom: .3em;
+            text-decoration: none;
+        }
     </style>
     <script>
         var map;
@@ -39,10 +58,10 @@
         function initMap() {
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {
-                    lat: -2.1248368,
-                    lng: 115.7491428
+                    lat: <?= $map['latitude']  ?>,
+                    lng: <?= $map['longitude']  ?>
                 },
-                zoom: 5,
+                zoom: 10,
             });
             //   addMarker({lat: -34.397, lng: 150.644})
             //   addMarker({lat: -33.870453,lng: 151.208755})
@@ -55,6 +74,7 @@
                         var ni = data[i].nama_instansi;
                         var alamat = data[i].alamat;
                         var foto = data[i].foto;
+                        var ng = data[i].nama_gedung
                         console.log(lat, long, ni, alamat, foto);
 
                         addMarker({
@@ -73,7 +93,7 @@
                             var infoWindow = new google.maps.InfoWindow({
                                 content: '<div class="img-thumbnail" style="width: 130px;">' +
                                     '<img style="width: 120px;border-radius: 5px;" src="<?= base_url('assets/img/profile/') ?>' + foto + '">' +
-                                    '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '<br>' +
+                                    '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '(' + ng + ')' + '<br>' +
                                     '</div>',
                             });
                             // marker.addListener('click', function() {

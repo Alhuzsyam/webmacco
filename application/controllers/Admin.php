@@ -94,7 +94,8 @@ class Admin extends CI_Controller
     public function deletemembers()
     {
         $id = $_GET['id'];
-        $this->db->delete('daftar_alat', ['id' => $id]);
+        $this->db->delete('user', ['email' => $id]);
+        $this->db->delete('daftar_alat', ['email' => $id]);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
         Member has Deleted!
         </div>');
@@ -112,5 +113,39 @@ class Admin extends CI_Controller
         $this->load->view('template/topbar', $data);
         $this->load->view('admin/member_detail', $data);
         $this->load->view('template/footer');
+    }
+
+    public function addmask()
+    {
+        $cek = $this->db->get_where('masker', ['id_masker' => $this->input->post('barcode')])->row_array();
+        $this->form_validation->set_rules('barcode', 'Barcode', 'trim|required');
+        $this->form_validation->set_rules('tag', 'Tag', 'trim|required');
+        if ($this->form_validation->run() == FALSE) {
+            $data['title'] = "Add Mask";
+            $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+            $data['tag'] = $this->db->get('scanner_machine')->result_array();
+            $this->load->view('template/header', $data);
+            $this->load->view('template/sidebar', $data);
+            $this->load->view('template/topbar', $data);
+            $this->load->view('admin/addmask', $data);
+            $this->load->view('template/footer');
+        } else if ($cek) {
+            $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert">
+            Mask Already Added !
+            </div>');
+            redirect('admin/addmask');
+        } else {
+            $data = [
+                'id_masker' => $this->input->post('barcode'),
+                'tag' => $this->input->post('tag'),
+            ];
+            $this->db->insert('masker', $data);
+            $this->db->where('tag', $this->input->post('tag'));
+            $this->db->delete('scanner_machine');
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+            Mask Has Added !
+            </div>');
+            redirect('admin/addmask');
+        }
     }
 }

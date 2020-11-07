@@ -10,7 +10,7 @@ class User extends CI_Controller
     }
     public function index()
     {
-        $data['title'] = "My Profile";
+        $data['title'] = "Penanggung Jawab";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar', $data);
@@ -23,7 +23,7 @@ class User extends CI_Controller
         $this->form_validation->set_rules('name', 'Full Name', 'trim|required');
 
         if ($this->form_validation->run() == FALSE) {
-            $data['title'] = "Edit Profile";
+            $data['title'] = "Edit Penanggung Jawab";
             $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
             $this->load->view('template/header', $data);
             $this->load->view('template/sidebar', $data);
@@ -165,6 +165,8 @@ class User extends CI_Controller
 
     public function device()
     {
+        $lat = $this->input->post('lat');
+        $long = $this->input->post('long');
         $this->form_validation->set_rules('gedung', 'Nama Gedung', 'trim|required');
         $this->form_validation->set_rules('ket', 'Keterangan', 'trim|required|min_length[10]|max_length[1000]');
         if ($this->form_validation->run() ==  FALSE) {
@@ -176,12 +178,19 @@ class User extends CI_Controller
             $this->load->view('template/topbar', $data);
             $this->load->view('user/tmabahalat', $data);
             $this->load->view('template/footer');
+        } else if ($lat == null || $long == null) {
+            $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert">
+            Please drag the marker !
+            </div>');
+            redirect('user/device');
         } else {
             $data = [
                 'id_reader' => $this->input->post('id'),
                 'nama_gedung' => $this->input->post('gedung'),
                 'ket' => $this->input->post('ket'),
                 'foto' => $this->_uploadFoto(),
+                'latitude' => $lat,
+                'longitude' => $long,
             ];
             $this->db->insert('reader_user', $data);
             $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
@@ -224,5 +233,46 @@ class User extends CI_Controller
         $this->db->where(['id_reader_user' => $id]);
         $this->db->delete('reader_user');
         redirect('user/listdevice');
+    }
+    public function change()
+    {
+        $data['title'] = "Change Password";
+        $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+        $this->form_validation->set_rules('current_password', 'Current Password', 'trim|required');
+        $this->form_validation->set_rules('new_password1', 'New Password', 'trim|required|min_length[3]|matches[new_password2]');
+        $this->form_validation->set_rules('new_password2', 'Repeat Password', 'trim|required|min_length[3]|matches[new_password1]');
+        if ($this->form_validation->run() == FALSE) {
+
+            $this->load->view('template/header', $data);
+            $this->load->view('template/sidebar', $data);
+            $this->load->view('template/topbar', $data);
+            $this->load->view('user/changepassword', $data);
+            $this->load->view('template/footer');
+        } else {
+            $current_password = $this->input->post('current_password');
+            $new_password = $this->input->post('new_password1');
+            if (!password_verify($current_password, $data['user']['password'])) {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+            Wrong Current Password !
+            </div>');
+                redirect('user/change');
+            } else {
+                if ($current_password == $new_password) {
+                    $this->session->set_flashdata('message', '<div class="alert alert-warning" role="alert">
+            New Password cannot be the same as current password  !
+            </div>');
+                    redirect('user/change');
+                } else {
+                    $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
+                    $this->db->set('password', $password_hash);
+                    $this->db->where('email', $this->session->userdata('email'));
+                    $this->db->update('user');
+                    $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
+                    Password Changed !
+                    </div>');
+                    redirect('user/change');
+                }
+            }
+        }
     }
 }

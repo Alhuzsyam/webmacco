@@ -21,7 +21,16 @@
                                 <div class="card-body">
                                     <h5 class="card-title"><?= $member['kota'] ?></h5>
                                     <p class="card-text"><?= $member['nama_instansi'] . ' - ' . $member['telephone'] ?></p>
-                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                    <p class="card-text btn btn-warningbadge badge-warning">ID ALAT : <span class=""><?= $member['id'] ?></span> </p>
+                                    <!-- <a href="#" class="btn btn-primary">ID Alat <span class="btn btn-warningbadge badge-warning"><?= $member['id'] ?></span></a> -->
+                                </div>
+                                <div class="card-body">
+                                    <h5 class="card-title">Instalasi Api</h5>
+                                    <code>
+                                        <p class="card-text">http://alicestech.com/webmacco/api/macco/scan?tag=tag_variable&id_alat=ID_ALAT</p>
+                                    </code>
+                                    <!-- <p class="card-text btn btn-warningbadge badge-warning">ID ALAT : <span class=""><?//= $member['id'] ?></span> </p> -->
+                                    <!-- <a href="#" class="btn btn-primary">ID Alat <span class="btn btn-warningbadge badge-warning"><?//= $member['id'] ?></span></a> -->
                                 </div>
                             </div>
                         </div>

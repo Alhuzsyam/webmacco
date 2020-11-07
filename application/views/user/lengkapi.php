@@ -26,11 +26,11 @@
                             <div class="fotm-group">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <input type="text" name="hp" id="hp" class="form-control" placeholder="No HP" aria-describedby="helpId" value="<?= $lengkapi['hp']; ?>">
+                                        <input type="number" min="0" name="hp" id="hp" class="form-control" placeholder="No HP" aria-describedby="helpId" value="<?= $lengkapi['hp']; ?>">
                                         <?= form_error('hp', ' <small class="text-danger pl-0">', '</small>') ?>
                                     </div>
                                     <div class="col-md-6">
-                                        <input type="text" name="telephone" id="telephone" class="form-control" placeholder="telephone" aria-describedby="helpId" value="<?= $lengkapi['telephone']; ?>">
+                                        <input type="number" min="0" name="telephone" id="telephone" class="form-control" placeholder="telephone" aria-describedby="helpId" value="<?= $lengkapi['telephone']; ?>">
                                         <?= form_error('telephone', ' <small class="text-danger pl-0">', '</small>') ?>
                                     </div>
                                 </div>
@@ -39,8 +39,8 @@
                                 <label for="exampleFormControlSelect1">JENIS INSTANSI</label>
                                 <select class="form-control" name="jinstansi" id="exampleFormControlSelect1">
                                     <option value="<?= $lengkapi['Jenis_instansi']; ?>"><?= $lengkapi['Jenis_instansi']; ?></option>
-                                    <option value="negeri">INSTANSI NEGERI</option>
-                                    <option value="swsta">INSTANSI SWASTA</option>
+                                    <option value="INSTANSI NEGER">INSTANSI NEGERI</option>
+                                    <option value="INSTANSI SWASTA">INSTANSI SWASTA</option>
                                 </select>
                                 <?= form_error('jinstansi', ' <small class="text-danger pl-0">', '</small>') ?>
                             </div>
