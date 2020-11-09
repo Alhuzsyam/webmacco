@@ -134,8 +134,10 @@ class Authentification extends CI_Controller
             'protocol'  => 'smtp',
             //'smtp_host' => 'ssl://smtp.googlemail.com',
             'smtp_host' => 'smtp.gmail.com',
-            'smtp_user' => 'Maccomask@gmail.com',
-            'smtp_pass' => 'Alhamdulillah12345678',
+            // 'smtp_user' => 'Maccomask@gmail.com',
+            // 'smtp_pass' => 'Alhamdulillah12345678',
+            'smtp_user' => 'alhuzwirialfi@gmail.com',
+            'smtp_pass' => '@alhuzwirifi12345678',
             'smtp_port' => '587',
             'smtp_crypto' => 'tls',
             'smtp_timeout' => '30',
@@ -144,6 +146,7 @@ class Authentification extends CI_Controller
             'wordwrap' => TRUE,
             'mailtype' => 'html'
         ];
+        // $mail = $this->load->view('email/activation');
         $this->email->initialize($config);
         $this->email->from('Maccomask@gmail.com', 'Macco Masker');
         $this->email->to($this->input->post('email'));
@@ -152,6 +155,7 @@ class Authentification extends CI_Controller
             $this->email->message('Click this link to verify this account <a href="' . base_url('Authentification/verify?email=') . $this->input->post('email') . '&' . 'token=' . $token . '">Activate</a> ');
         } else if ($type == 'forgot') {
             $this->email->subject('Reset Password');
+            // $this->email->message($mail);
             $this->email->message('Click this link to reset your password <a href="' . base_url('Authentification/resetpassword?email=') . $this->input->post('email') . '&' . 'token=' . $token . '">Reset Password</a> ');
         }
 

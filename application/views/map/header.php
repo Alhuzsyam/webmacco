@@ -52,108 +52,217 @@
             text-decoration: none;
         }
     </style>
-    <script>
-        var map;
+    <input type="hidden" name="" id="role" value="<?= $role['role_id'] ?>">
+    <?php if ($role['role_id'] == 2) { ?>
+        <script>
+            var map;
 
-        function initMap() {
-            map = new google.maps.Map(document.getElementById('map'), {
-                center: {
-                    lat: <?= $map['latitude']  ?>,
-                    lng: <?= $map['longitude']  ?>
-                },
-                zoom: 10,
-            });
-            //   addMarker({lat: -34.397, lng: 150.644})
-            //   addMarker({lat: -33.870453,lng: 151.208755})
-            fetch('http://localhost/webmacco/map/fetchmarker')
-                .then(response => response.json())
-                .then(data => {
-                    for (const i in data) {
-                        var lat = parseFloat(data[i].latitude);
-                        var long = parseFloat(data[i].longitude);
-                        var ni = data[i].nama_instansi;
-                        var alamat = data[i].alamat;
-                        var foto = data[i].foto;
-                        var ng = data[i].nama_gedung
-                        console.log(lat, long, ni, alamat, foto);
-
-                        addMarker({
-                            lat: lat,
-                            lng: long
-                        })
-
-                        function addMarker(coords) {
-                            var marker = new google.maps.Marker({
-                                position: coords,
-                                dragable: true,
-                                map: map,
-                                icon: '<?= base_url('assets/img/image/maccoreader.svg') ?>',
-                            });
-
-                            var infoWindow = new google.maps.InfoWindow({
-                                content: '<div class="img-thumbnail" style="width: 130px;">' +
-                                    '<img style="width: 120px;border-radius: 5px;" src="<?= base_url('assets/img/profile/') ?>' + foto + '">' +
-                                    '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '(' + ng + ')' + '<br>' +
-                                    '</div>',
-                            });
-                            // marker.addListener('click', function() {
-                            //     infoWindow.open(map, marker);
-                            // });
-                            google.maps.event.addListener(marker, 'mouseover', function() {
-                                infoWindow.open(map, marker);
-                            });
-                            google.maps.event.addListener(marker, 'mouseout', function() {
-                                infoWindow.close(map, marker);
-                            });
-                        }
-                    }
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: <?= $map['latitude']  ?>,
+                        lng: <?= $map['longitude']  ?>
+                    },
+                    zoom: 10,
                 });
-            fetch('http://localhost/webmacco/map/fetchuser')
-                .then(response => response.json())
-                .then(data => {
-                    for (const i in data) {
-                        var lat = parseFloat(data[i].latitude);
-                        var long = parseFloat(data[i].logitude);
-                        // var ni = data[i].nama_instansi;
-                        // var alamat = data[i].alamat;
-                        // var foto = data[i].foto;
-                        console.log(lat, long);
+                //   addMarker({lat: -34.397, lng: 150.644})
+                //   addMarker({lat: -33.870453,lng: 151.208755})
+                fetch('http://localhost/webmacco/map/fetchmarker')
+                    .then(response => response.json())
+                    .then(data => {
+                        for (const i in data) {
+                            var lat = parseFloat(data[i].latitude);
+                            var long = parseFloat(data[i].longitude);
+                            var ni = data[i].nama_instansi;
+                            var alamat = data[i].alamat;
+                            var foto = data[i].foto;
+                            var ng = data[i].nama_gedung
+                            console.log(lat, long, ni, alamat, foto);
 
-                        addMarker({
-                            lat: lat,
-                            lng: long
-                        })
+                            addMarker({
+                                lat: lat,
+                                lng: long
+                            })
 
-                        function addMarker(coords) {
-                            var marker = new google.maps.Marker({
-                                position: coords,
-                                dragable: true,
-                                map: map,
-                                icon: '<?= base_url('assets/img/image/user.svg') ?>',
-                            });
-                            google.maps.event.addListener(marker, 'mouseover', function() {
-                                if (marker.getAnimation() !== null) {
-                                    marker.setAnimation(null);
-                                } else {
-                                    marker.setAnimation(google.maps.Animation.BOUNCE);
-                                }
-                            });
-                            // google.maps.event.addListener(marker, 'mouseout', function() {
-                            //     marker.setAnimation(google.maps.Animation.DROP);
-                            // });
+                            function addMarker(coords) {
+                                var marker = new google.maps.Marker({
+                                    position: coords,
+                                    dragable: true,
+                                    map: map,
+                                    icon: '<?= base_url('assets/img/image/maccoreader.svg') ?>',
+                                });
 
-                            // var infoWindow = new google.maps.InfoWindow({
-                            //     content: '<div class="img-thumbnail" style="width: 130px;">' +
-                            //         '<img style="width: 120px;border-radius: 5px;" src="<?//= base_url('assets/img/profile/') ?>' + foto + '">' +
-                            //         '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '<br>' +
-                            //         '</div>',
-                            // });
-                            // marker.addListener('click', function() {
-                            //     infoWindow.open(map, marker);
-                            // });
+                                var infoWindow = new google.maps.InfoWindow({
+                                    content: '<div class="img-thumbnail" style="width: 130px;">' +
+                                        '<img style="width: 120px;border-radius: 5px;" src="<?= base_url('assets/img/profile/') ?>' + foto + '">' +
+                                        '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '(' + ng + ')' + '<br>' +
+                                        '</div>',
+                                });
+                                // marker.addListener('click', function() {
+                                //     infoWindow.open(map, marker);
+                                // });
+                                google.maps.event.addListener(marker, 'mouseover', function() {
+                                    infoWindow.open(map, marker);
+                                });
+                                google.maps.event.addListener(marker, 'mouseout', function() {
+                                    infoWindow.close(map, marker);
+                                });
+                            }
                         }
-                    }
+                    });
+                fetch('http://localhost/webmacco/map/fetchuser')
+                    .then(response => response.json())
+                    .then(data => {
+                        for (const i in data) {
+                            var lat = parseFloat(data[i].latitude);
+                            var long = parseFloat(data[i].logitude);
+                            // var ni = data[i].nama_instansi;
+                            // var alamat = data[i].alamat;
+                            // var foto = data[i].foto;
+                            console.log(lat, long);
+
+                            addMarker({
+                                lat: lat,
+                                lng: long
+                            })
+
+                            function addMarker(coords) {
+                                var marker = new google.maps.Marker({
+                                    position: coords,
+                                    dragable: true,
+                                    map: map,
+                                    icon: '<?= base_url('assets/img/image/user.svg') ?>',
+                                });
+                                google.maps.event.addListener(marker, 'mouseover', function() {
+                                    if (marker.getAnimation() !== null) {
+                                        marker.setAnimation(null);
+                                    } else {
+                                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                                    }
+                                });
+                                // google.maps.event.addListener(marker, 'mouseout', function() {
+                                //     marker.setAnimation(google.maps.Animation.DROP);
+                                // });
+
+                                // var infoWindow = new google.maps.InfoWindow({
+                                //     content: '<div class="img-thumbnail" style="width: 130px;">' +
+                                //         '<img style="width: 120px;border-radius: 5px;" src="<?//= base_url('assets/img/profile/') ?>' + foto + '">' +
+                                //         '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '<br>' +
+                                //         '</div>',
+                                // });
+                                // marker.addListener('click', function() {
+                                //     infoWindow.open(map, marker);
+                                // });
+                            }
+                        }
+                    });
+            }
+        </script>
+    <?php } else { ?>
+        <script>
+            var map;
+
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: {
+                        lat: -2.5489,
+                        lng: 118.0149
+                    },
+                    zoom: 5,
                 });
-        }
-    </script>
+                //   addMarker({lat: -34.397, lng: 150.644})
+                //   addMarker({lat: -33.870453,lng: 151.208755})
+                fetch('http://localhost/webmacco/map/fetchmarker')
+                    .then(response => response.json())
+                    .then(data => {
+                        for (const i in data) {
+                            var lat = parseFloat(data[i].latitude);
+                            var long = parseFloat(data[i].longitude);
+                            var ni = data[i].nama_instansi;
+                            var alamat = data[i].alamat;
+                            var foto = data[i].foto;
+                            var ng = data[i].nama_gedung
+                            console.log(lat, long, ni, alamat, foto);
+
+                            addMarker({
+                                lat: lat,
+                                lng: long
+                            })
+
+                            function addMarker(coords) {
+                                var marker = new google.maps.Marker({
+                                    position: coords,
+                                    dragable: true,
+                                    map: map,
+                                    icon: '<?= base_url('assets/img/image/maccoreader.svg') ?>',
+                                });
+
+                                var infoWindow = new google.maps.InfoWindow({
+                                    content: '<div class="img-thumbnail" style="width: 130px;">' +
+                                        '<img style="width: 120px;border-radius: 5px;" src="<?= base_url('assets/img/profile/') ?>' + foto + '">' +
+                                        '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '(' + ng + ')' + '<br>' +
+                                        '</div>',
+                                });
+                                // marker.addListener('click', function() {
+                                //     infoWindow.open(map, marker);
+                                // });
+                                google.maps.event.addListener(marker, 'mouseover', function() {
+                                    infoWindow.open(map, marker);
+                                });
+                                google.maps.event.addListener(marker, 'mouseout', function() {
+                                    infoWindow.close(map, marker);
+                                });
+                            }
+                        }
+                    });
+                fetch('http://localhost/webmacco/map/fetchuser')
+                    .then(response => response.json())
+                    .then(data => {
+                        for (const i in data) {
+                            var lat = parseFloat(data[i].latitude);
+                            var long = parseFloat(data[i].logitude);
+                            // var ni = data[i].nama_instansi;
+                            // var alamat = data[i].alamat;
+                            // var foto = data[i].foto;
+                            console.log(lat, long);
+
+                            addMarker({
+                                lat: lat,
+                                lng: long
+                            })
+
+                            function addMarker(coords) {
+                                var marker = new google.maps.Marker({
+                                    position: coords,
+                                    dragable: true,
+                                    map: map,
+                                    icon: '<?= base_url('assets/img/image/user.svg') ?>',
+                                });
+                                google.maps.event.addListener(marker, 'mouseover', function() {
+                                    if (marker.getAnimation() !== null) {
+                                        marker.setAnimation(null);
+                                    } else {
+                                        marker.setAnimation(google.maps.Animation.BOUNCE);
+                                    }
+                                });
+                                // google.maps.event.addListener(marker, 'mouseout', function() {
+                                //     marker.setAnimation(google.maps.Animation.DROP);
+                                // });
+
+                                // var infoWindow = new google.maps.InfoWindow({
+                                //     content: '<div class="img-thumbnail" style="width: 130px;">' +
+                                //         '<img style="width: 120px;border-radius: 5px;" src="<?//= base_url('assets/img/profile/') ?>' + foto + '">' +
+                                //         '<span class=" font-weight-bold text-success text-center" >Macco Reader</span>' + '<br>' + alamat + '<br>' + ' instansi :' + ni + '<br>' +
+                                //         '</div>',
+                                // });
+                                // marker.addListener('click', function() {
+                                //     infoWindow.open(map, marker);
+                                // });
+                            }
+                        }
+                    });
+            }
+        </script>
+    <?php
+    } ?>
 </head>

@@ -94,8 +94,11 @@ class Admin extends CI_Controller
     public function deletemembers()
     {
         $id = $_GET['id'];
+        $idu = $_GET['idu'];
+        $data['alat'] = $this->db->query("SELECT `daftar_alat`.`id` FROM `daftar_alat` INNER JOIN `reader_user` ON `daftar_alat`.`id` = `reader_user`.`id_reader` WHERE daftar_alat.id='$idu'")->result_array();
         $this->db->delete('user', ['email' => $id]);
         $this->db->delete('daftar_alat', ['email' => $id]);
+        $this->db->delete('reader_user', ['id_reader' => $data['alat']['0']['id']]);
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
         Member has Deleted!
         </div>');
@@ -105,7 +108,8 @@ class Admin extends CI_Controller
     public function detail()
     {
         $id = $this->input->get('id');
-        $data['member'] = $this->db->get_where('daftar_alat', ['id' => $id])->row_array();
+        $data['member'] = $this->db->get("daftar_alat")->row_array();
+        $data['alat'] = $this->db->query("SELECT * FROM `daftar_alat` INNER JOIN `reader_user` ON `daftar_alat`.`id` = `reader_user`.`id_reader` WHERE daftar_alat.id='$id'")->result_array();
         $data['title'] = "Macco Reader User";
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $this->load->view('template/header', $data);

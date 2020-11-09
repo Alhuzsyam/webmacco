@@ -40,6 +40,14 @@
                                 <?= form_error('ket', ' <small class="text-danger pl-0">', '</small>') ?>
                                 <!-- </div> -->
                             </div>
+                            <div class="form-group row">
+                                <div class="col-md-6">
+                                    <input type="text" name="alamat_lengkap" id="map-search" placeholder="Ketik Alamat..." class="form-control" value="" />
+                                </div>
+                                <div class="col-md-6">
+                                    <input type="text" name="kota" id="kota" placeholder="Nama Kota..." class="form-control reg-input-city" value="" />
+                                </div>
+                            </div>
                             <div class="form-group">
                                 <div id="map-canvas" class="form-control" style="height: 300px"></div>
                                 <br>
@@ -56,8 +64,8 @@
 
                         </div>
                     </div>
-                    <input type="hidden" name="alamat_lengkap" id="map-search" placeholder="Ketik Alamat..." class="form-control" value="" />
-                    <input type="hidden" name="kota" id="kota" placeholder="Nama Kota..." class="form-control reg-input-city" value="" />
+
+
                     <input type="hidden" name="lat" id="lat" value="" class="latitude">
                     <input type="hidden" name="long" id="long" value="" class="longitude">
                     </form>

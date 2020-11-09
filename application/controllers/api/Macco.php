@@ -108,8 +108,6 @@ class Macco extends REST_Controller
         }
     }
 
-
-    //tambahkan model
     public function getlocation_post()
     {
         $id = $this->post('id');
@@ -142,6 +140,7 @@ class Macco extends REST_Controller
         $terdekat = [
             'latitude' => $closest['latitude'],
             'longitude' => $closest['longitude'],
+            'id_alat' => $closest['id_reader'],
             // 'alamat' => $closest['alamat'],
             'user' => $id,
             'jarak' => $jarak
@@ -153,15 +152,31 @@ class Macco extends REST_Controller
             $this->db->where('id_user', $id);
             $this->db->update('masker_user');
         } else {
-            echo "ada macco";
-            $scan = $this->db->get_where('masker_raders', ['id_reader_user' => $id])->row_array();
-            if ($scan['id_reader_user'] == $id) {
+            // echo "ada macco";
+            $cari = $this->db->get_where('reader_user', ['id_reader' => $terdekat['id_alat']])->row_array();
+            $scan = $this->db->get_where('masker_raders', ['id_reader' => $cari['id_reader_user']])->row_array();
+            $str_scan = explode(",", $scan['id_reader_user']);
+            // print_r($str_scan);
+            // exit;
+            $check = false;
+            foreach ($str_scan as $sc) :
+                if ($sc == $id) {
+
+                    $check = true;
+                    break;
+                }
+
+            endforeach;
+
+            if ($check == true) {
+                // var_dump($sc);
+                var_dump($check);
                 // $this->db->where('id_reader_user', $id);
                 // $this->db->delete('masker_raders');
                 $this->db->set('payment', "true");
                 $this->db->where('id_user', $id);
                 $this->db->update('masker_user');
-                $this->response($terdekat);
+                $this->response(['status' => true, 'message' => 'beres'], 200);
             } else {
                 $scan = $this->db->get_where('masker_user', ['id_user' => $id])->row_array();
                 $email = $scan['email'];
@@ -240,16 +255,23 @@ class Macco extends REST_Controller
     public function scan_get()
     {
         $tag = $this->input->get('tag');
+        $splil_tag = explode(',', $tag);
         $id = $this->input->get('id_alat');
-        $data = $this->Users_Model->check_mask($tag);
+        $void = "";
+        foreach ($splil_tag as $sp) :
+            $data = $this->Users_Model->check_mask($sp);
+            if ($data != null) {
+                $void = $void . $data['id_user'] . ',';
+            }
+        endforeach;
         $read = [
             'id_reader' => $id,
-            'id_reader_user' => $data['id_user']
+            'id_reader_user' => $void
         ];
         $check = $this->db->get('masker_raders')->row_array();
-        if ($check['id_reader'] == $id) {
+        if ($check) {
             if ($data) {
-                $this->db->set('id_reader_user', $data['id_user']);
+                $this->db->set('id_reader_user', $void);
                 $this->db->where('id_reader', $id);
                 $this->db->update('masker_raders');
                 $this->response([
@@ -275,7 +297,6 @@ class Macco extends REST_Controller
 
 
     private function _kirim($email)
-
     {
         $config = [
             'protocol'  => 'smtp',

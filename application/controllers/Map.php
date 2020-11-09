@@ -7,6 +7,8 @@ class Map extends CI_Controller
     {
         $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
         $data['map'] = $this->db->get_where('daftar_alat', ['email' => $data['user']['email']])->row_array();
+        $email =  $data['map']['email'];
+        $data['role'] = $this->db->query("SELECT user.role_id FROM `user` INNER JOIN daftar_alat ON user.email = daftar_alat.email WHERE daftar_alat.email = '$email'")->row_array();
         $this->load->view('map/header', $data);
         // $this->load->view('map/topbar');
         $this->load->view('map/index');

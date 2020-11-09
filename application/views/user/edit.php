@@ -34,7 +34,8 @@
                             <div class="form-group row justify-content-end mt-2">
                                 <div class="col-sm-10">
                                     <button type="submit" class="btn btn-primary">Edit</button>
-                                    <a href="<?= base_url('user/lengkapi') ?>" class="btn btn-primary">Lengkapi</a>
+                                    <a href="<?= base_url('user/lengkapi') ?>" id="lengkapi" class="btn btn-primary">Lengkapi</a>
+                                    <input type="hidden" id="role" value="<?= $user['role_id']; ?>">
                                 </div>
                             </div>
                             </form>

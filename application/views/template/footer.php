@@ -94,6 +94,14 @@
          $("#imgInp").change(function() {
              readURL(this);
          });
+
+         val = $("#role").val();
+         console.log(val);
+         if (val == 1) {
+             $("#lengkapi").hide();
+         } else {
+             $("#lengkapi").show();
+         }
      });
  </script>
 

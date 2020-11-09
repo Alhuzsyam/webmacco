@@ -9,7 +9,11 @@
                             <div class="card" style="width: 18rem;">
                                 <img class="card-img-top" src="<?= base_url('assets/img/image/') . 'addmask.svg' ?>" alt="Card image cap">
                                 <div class="card-body">
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    <h4>Keterangan</h4>
+                                    <p class="card-text">Cara menambahkan masker adalah dengan scan tag terlebih dahulu setelah itu masukan barcode, lalu simpan setiap tag yang
+                                        tesimpan tag akan di inputkan ke table masker dan akan di hapus pada table tag </p><br>
+                                    <h5>Api isi tag</h5>
+                                    <code>http://www.alicestech.com/macco/webmacco/api/macco/isitag?tag=variabel_tag</code>
                                 </div>
                             </div>
                         </div>
